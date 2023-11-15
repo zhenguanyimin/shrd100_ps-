@@ -1,0 +1,5 @@
+1、build目录同app目录置于同一层
+2、修改conf.properties文件中的workspace目录
+3、修改build.bat中的pothon调用指令py为本机pothon调用指令
+4、确认环境变量设置正确
+5、运行命令行时需要关闭vitis

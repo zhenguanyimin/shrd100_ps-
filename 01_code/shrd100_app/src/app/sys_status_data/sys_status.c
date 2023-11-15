@@ -1,0 +1,89 @@
+/*
+ * sys_status.c
+ *
+ *  Created on: 2023年1月19日
+ *      Author: A21001
+ */
+
+/* FreeRTOS includes. */
+#include "FreeRTOS.h"
+#include "task.h"
+#include <queue.h>
+
+#include "../../cfg/shrd_config.h"
+#include "sys_status.h"
+
+#define BATTERY_CAP_WARNING_THRESHOLD 10
+
+typedef struct SYS_SystemStatus
+{
+	SYS_SystemStatusMode_t curSysStatus;
+	SYS_SystemStatusMode_t newSysStatus;
+} SYS_SystemStatus_t;
+
+typedef struct SYS_StatusChangeFunctionMap
+{
+	SYS_SystemStatusMode_t curSysStatus;
+	SYS_SystemStatusMode_t newSysStatus;
+
+	void (*pCallFunction)(void);
+} SYS_StatusChangeFunctionMap_t;
+
+static void SYS_Detetion2Hit(void);
+static void SYS_Hit2Detetion(void);
+
+static SYS_SystemStatus_t SystemStaus = {SYS_DETECTION_TARGET_STATUS, SYS_IDLE_STATUS};
+static QueueHandle_t xSysStausQueue;
+static SYS_StatusChangeFunctionMap_t StatusChangeFunctionMap[] =
+{
+	{SYS_IDLE_STATUS, SYS_IDLE_STATUS, NULL},
+	{SYS_IDLE_STATUS, SYS_DETECTION_TARGET_STATUS, NULL},
+	{SYS_IDLE_STATUS, SYS_HIT_TARGET_STATUS, NULL},
+	{SYS_IDLE_STATUS, SYS_SIMULATION_SIGAL_TO_TARGET_STATUS, NULL},
+	{SYS_IDLE_STATUS, SYS_MALFUNCTION_STATUS, NULL},
+	{SYS_DETECTION_TARGET_STATUS, SYS_IDLE_STATUS, NULL},
+	{SYS_DETECTION_TARGET_STATUS, SYS_DETECTION_TARGET_STATUS, NULL},
+//	{SYS_DETECTION_TARGET_STATUS, SYS_HIT_TARGET_STATUS, SYS_Detetion2Hit},
+	{SYS_DETECTION_TARGET_STATUS, SYS_SIMULATION_SIGAL_TO_TARGET_STATUS, NULL},
+	{SYS_DETECTION_TARGET_STATUS, SYS_MALFUNCTION_STATUS, NULL},
+	{SYS_HIT_TARGET_STATUS, SYS_IDLE_STATUS, NULL},
+//	{SYS_HIT_TARGET_STATUS, SYS_DETECTION_TARGET_STATUS, SYS_Hit2Detetion},
+	{SYS_HIT_TARGET_STATUS, SYS_HIT_TARGET_STATUS, NULL},
+	{SYS_HIT_TARGET_STATUS, SYS_MALFUNCTION_STATUS, NULL},
+	{SYS_HIT_TARGET_STATUS, SYS_IDLE_STATUS, NULL},
+	{SYS_SIMULATION_SIGAL_TO_TARGET_STATUS, SYS_IDLE_STATUS, NULL},
+	{SYS_SIMULATION_SIGAL_TO_TARGET_STATUS, SYS_DETECTION_TARGET_STATUS, NULL},
+	{SYS_SIMULATION_SIGAL_TO_TARGET_STATUS, SYS_HIT_TARGET_STATUS, NULL},
+	{SYS_SIMULATION_SIGAL_TO_TARGET_STATUS, SYS_SIMULATION_SIGAL_TO_TARGET_STATUS, NULL},
+	{SYS_SIMULATION_SIGAL_TO_TARGET_STATUS, SYS_MALFUNCTION_STATUS, NULL},
+	{SYS_MALFUNCTION_STATUS, SYS_IDLE_STATUS, NULL},
+	{SYS_MALFUNCTION_STATUS, SYS_DETECTION_TARGET_STATUS, NULL},
+	{SYS_MALFUNCTION_STATUS, SYS_HIT_TARGET_STATUS, NULL},
+	{SYS_MALFUNCTION_STATUS, SYS_SIMULATION_SIGAL_TO_TARGET_STATUS, NULL},
+	{SYS_MALFUNCTION_STATUS, SYS_MALFUNCTION_STATUS, NULL}
+};
+
+int32_t SYS_GetSysStatus(SYS_SystemStatusMode_t *pSysStaus)
+{
+	int32_t Result = 0;
+
+	if (pSysStaus == NULL)
+	{
+		Result = 1;
+	}
+	else
+	{
+		*pSysStaus = SystemStaus.curSysStatus;
+	}
+
+	return Result;
+}
+
+void SYS_SetSysStatus(SYS_SystemStatusMode_t SetSysStatus)
+{
+	if (xSysStausQueue != NULL)
+	{
+		xQueueSend(xSysStausQueue, &SetSysStatus, 10);
+	}
+}
+

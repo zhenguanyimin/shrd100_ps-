@@ -1,0 +1,7 @@
+//arch = zynqmp; split = false; format = BIN
+the_ROM_image:
+{
+	[bootloader, destination_cpu = a53-0]F:\shrd100_ps\dev_embed_droneid\01_code\shrd100_plt\export\shrd100_plt\sw\shrd100_plt\boot\fsbl.elf
+	[destination_device = pl]F:\shrd100_ps\dev_embed_droneid\01_code\hw_spec\droneid_PL_0A030023.bit
+	[destination_cpu = a53-0]F:\shrd100_ps\dev_embed_droneid\01_code\shrd100_app\Debug\shrd100_app.elf
+}

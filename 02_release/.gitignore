@@ -1,0 +1,6 @@
+*.log
+*.a
+.analytics
+/.metadata/
+/RemoteSystemsTempFiles/
+/workspace/

@@ -1,0 +1,14 @@
+
+#ifndef RADAR_DEFINES_H
+#define RADAR_DEFINES_H
+
+#define RADAR_MANUFACTURER "AUTEL"
+
+#define RADAR_TX_CHN_ROW_CNT (4)
+#define RADAR_TX_CHN_COL_CNT (16)
+#define RADAR_RX_CHN_ROW_CNT (4)
+#define RADAR_RX_CHN_COL_CNT (16)
+
+#define RADAR_TARGET_NUM_MAX (64)
+
+#endif /* RADAR_DEFINES_H */

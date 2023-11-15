@@ -1,0 +1,72 @@
+#ifndef _DOWNLOADSNIFFER_H__
+#define _DOWNLOADSNIFFER_H__
+
+#define PI 3.1415926535898
+
+#define MaxDroneinLib 30
+#define MaxPulseWNumInLib 5
+#define MaxNumVidT 50
+#define MaxPulseInObj 100
+#define MaxVidPulse 50
+
+/*
+static float Mask[35]={
+0.0106971325264857,0.0155642359870698,0.0176365899319151,0.0155642359870698,0.0106971325264857,
+0.0199848745987236,0.0290778209633642,0.0329494878431903,0.0290778209633642,0.0199848745987236,
+0.0290778209633642,0.0423079798575001,0.0479412219279087,0.0423079798575001,0.0290778209633642,
+0.0329494878431903,0.0479412219279087,0.0543245214657432,0.0479412219279087,0.0329494878431903,
+0.0290778209633642,0.0423079798575001,0.0479412219279087,0.0423079798575001,0.0290778209633642,
+0.0199848745987236,0.0290778209633642,0.0329494878431903,0.0290778209633642,0.0199848745987236,
+0.0106971325264857,0.0155642359870698,0.0176365899319151,0.0155642359870698,0.0106971325264857};
+*/
+
+/*
+static float Mask[25] = {
+0.0232468398782944,0.0338239524399224,0.0383275593839038,0.0338239524399224,0.0232468398782944,
+0.0338239524399224,0.0492135604085415,0.0557662698468493,0.0492135604085415,0.0338239524399224,
+0.0383275593839038,0.0557662698468493,0.0631914624102643,0.0557662698468493,0.0383275593839038,
+0.0338239524399224,0.0492135604085415,0.0557662698468493,0.0492135604085415,0.0338239524399224,
+0.0232468398782944,0.0338239524399224,0.0383275593839038,0.0338239524399224,0.0232468398782944};
+*/
+// dingyu, 20230207
+
+
+static float Mask[15] = {
+0.05,0.05,0.05,0.05,0.05,
+0.1,0.1,0.1,0.1,0.1,
+0.05,0.05,0.05,0.05,0.05};
+
+
+// dingyu, 20230308
+#define MaskH 3 // 7 // 5
+#define MaskW 5
+
+
+
+struct BlockRow
+{
+    int   id;
+    int   uavIndex;
+    int   antIndex;
+    char  inCh[NCh];
+    int   colIndex;
+    int   allColIndex[NFFT / N];
+    int   nCol;
+    int   q1[MaxPulseInGroup];
+    int   w[MaxPulseInGroup];
+    float meanColAmp;
+    float snr;
+    int   nw;
+};
+
+
+
+void downLoadSniffer( struct blockGroup *uavPulse, int *nUavPulse, float ***specMat, int nRows, int nCols, float cenFreq, float gain, float dt, float dF, struct DroneLib *UAVtypes, int nUav, int *vidSpan);
+
+void downLoadSniffer_noFilt( struct blockGroup *droneBlock, int *nBlock, float ***downMat, int nRows, int nCols, float cenFreq, float gain, float dT, float dF, struct DroneLib *UAVtypes, int nUav, int *vidSpan);
+
+void printDroneBlock(struct blockGroup *uavPulse, int nUavPulse, struct DroneLib *UAVtypes);
+
+void SetUAVtypesSNR(float value);
+#endif
+

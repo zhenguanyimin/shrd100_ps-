@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ASCII"?>
+<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="shrd100_app" location="D:/project/shrd100_ps/dev_embed/code/shrd100_app" platform="D:/project/shrd100_ps/dev_embed/code/shrd100_plt/export/shrd100_plt/shrd100_plt.xpfm" platformUID="xilinx:::0.0(custom)" systemProject="shrd100_app_system" sysConfig="shrd100_plt" runtime="C/C++" cpu="freertos10_xilinx_domain" cpuInstance="psu_cortexa53_0" os="freertos10_xilinx" mssSignature="788c4db191f6ac5b72c3097d324e1213">
+  <configuration name="Debug" id="xilinx.gnu.arm.a53.exe.debug.1427888720">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+    <lastBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <configuration name="Release" id="xilinx.gnu.arm.a53.exe.release.848476641" dirty="true">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <template appTemplateName="freertos_hello_world" hasBspSettings="true"/>
+</sdkproject:SdkProject>
